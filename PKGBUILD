@@ -1,10 +1,10 @@
 # Contributor: Thomas Laroche <tho.laroche@gmail.com>
 # Maintainer: Thomas Fanninger <thomas@fanninger.at>
 
-pkgname=gogs-git
 _pkgname=gogs
 _branch=master
 _gourl=github.com/gogits/$_pkgname
+pkgname=gogs-git
 pkgver=r3871.7049cb9
 pkgrel=1
 pkgdesc="Gogs(Go Git Service) is a Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
