@@ -43,7 +43,9 @@ prepare() {
     mkdir -p "${_builddir}/src/${_gourl}"
     mv  ${_pkgname} "${_builddir}/src/${_gourl}/${_pkgname}"
     cd "${_builddir}/src/${_gourl}/${_pkgname}"
-    glide install
+    git remote set-url origin https://${_gourl}/${_pkgname}
+    git checkout -q -f master
+    go get -u -x -d -tags='sqlite pam cert' ./...
 }
 
 build() {
