@@ -4,9 +4,10 @@
 _branch=master
 _pkgname=gogs
 _gourl=github.com/gogits
+_gopath=${GOPATH}
 pkgname=gogs-git
-pkgver=r3879.3c0c7a9
-pkgrel=2
+pkgver=r4186.2bec8a4
+pkgrel=1
 pkgdesc="Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
 url="http://gogs.io/"
@@ -30,35 +31,37 @@ source=('gogs.service'
         "${_pkgname}::git+https://${_gourl}/${_pkgname}.git#branch=${_branch}")
 
 pkgver(){
-    GOPATH="$srcdir/build"
-    cd "$GOPATH/src/${_gourl}/${_pkgname}"
+    _builddir=$srcdir/build
+    cd "${_builddir}/src/${_gourl}/${_pkgname}"
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
-    GOPATH="$srcdir/build"
-    rm -rf "$GOPATH/src/${_gourl}"
-    mkdir -p "$GOPATH/src/${_gourl}"
-    mv  ${_pkgname} "$GOPATH/src/${_gourl}/${_pkgname}"
-    cd "$GOPATH/src/${_gourl}/${_pkgname}"
+    _builddir=$srcdir/build
+    GOPATH="${_builddir}${_gopath:+:${_gopath}}"
+    rm -rf "${_builddir}/src/${_gourl}"
+    mkdir -p "${_builddir}/src/${_gourl}"
+    mv  ${_pkgname} "${_builddir}/src/${_gourl}/${_pkgname}"
+    cd "${_builddir}/src/${_gourl}/${_pkgname}"
     glide install
 }
 
 build() {
-    GOPATH="$srcdir/build"
-    cd "$GOPATH/src/${_gourl}/${_pkgname}"
+    _builddir=$srcdir/build
+    GOPATH="${_builddir}${_gopath:+:${_gopath}}"
+    cd "${_builddir}/src/${_gourl}/${_pkgname}"
     go fix
     go build -x -tags='sqlite pam cert'
 }
 
 package() {
-    GOPATH="$srcdir/build"
-    install -Dm0755 "$GOPATH/src/${_gourl}/${_pkgname}/${_pkgname}" "$pkgdir/usr/share/${_pkgname}/${_pkgname}"
-    cp -r "$GOPATH/src/${_gourl}/${_pkgname}/conf" "$pkgdir/usr/share/${_pkgname}"
+    _builddir=$srcdir/build
+    install -Dm0755 "${_builddir}/src/${_gourl}/${_pkgname}/${_pkgname}" "$pkgdir/usr/share/${_pkgname}/${_pkgname}"
+    cp -r "${_builddir}/src/${_gourl}/${_pkgname}/conf" "$pkgdir/usr/share/${_pkgname}"
     install -dm755 "$pkgdir/usr/share/themes/gogs/default"
-    cp -r "$GOPATH/src/${_gourl}/${_pkgname}/public" "$pkgdir/usr/share/themes/gogs/default"
-    cp -r "$GOPATH/src/${_gourl}/${_pkgname}/templates" "$pkgdir/usr/share/themes/gogs/default"
-    install -Dm0644 "$GOPATH/src/${_gourl}/${_pkgname}/conf/app.ini" "$pkgdir/etc/${_pkgname}/app.ini"
+    cp -r "${_builddir}/src/${_gourl}/${_pkgname}/public" "$pkgdir/usr/share/themes/gogs/default"
+    cp -r "${_builddir}/src/${_gourl}/${_pkgname}/templates" "$pkgdir/usr/share/themes/gogs/default"
+    install -Dm0644 "${_builddir}/src/${_gourl}/${_pkgname}/conf/app.ini" "$pkgdir/etc/${_pkgname}/app.ini"
     install -Dm0644 "$srcdir/gogs.service" "$pkgdir/usr/lib/systemd/system/gogs.service"
 }
 
