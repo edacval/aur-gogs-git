@@ -4,9 +4,8 @@
 _branch=master
 _pkgname=gogs
 _gourl=github.com/gogits
-_gopath=${GOPATH}
 pkgname=gogs-git
-pkgver=r4186.2bec8a4
+pkgver=r4256.8059175a
 pkgrel=1
 pkgdesc="Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
@@ -18,8 +17,7 @@ optdepends=('sqlite: SQLite support'
             'postgresql: PostgreSQL support'
             'redis: Redis support'
             'memcached: MemCached support'
-            'openssh: GIT over SSH support'
-            'tidb-git: TiDB support')
+            'openssh: GIT over SSH support')
 makedepends=('go>=1.4' 'git' 'glide')
 conflicts=('gogs')
 provides=('gogs')
@@ -38,19 +36,22 @@ pkgver(){
 
 prepare() {
     _builddir=$srcdir/build
-    GOPATH="${_builddir}${_gopath:+:${_gopath}}"
-    rm -rf "${_builddir}/src/${_gourl}"
+    GOPATH=${_builddir}
+    rm -rf "${_builddir}/src/${_gourl}/${_pkgname}"
     mkdir -p "${_builddir}/src/${_gourl}"
     mv  ${_pkgname} "${_builddir}/src/${_gourl}/${_pkgname}"
     cd "${_builddir}/src/${_gourl}/${_pkgname}"
-    git remote set-url origin https://${_gourl}/${_pkgname}
-    git checkout -q -f master
-    go get -u -x -d -tags='sqlite pam cert' ./...
+    #git remote set-url origin https://${_gourl}/${_pkgname}
+    git checkout -f ${_branch}
+    #go get -x -d -tags='sqlite pam cert' ./...
+    glide cc
+    glide update
+    glide install
 }
 
 build() {
     _builddir=$srcdir/build
-    GOPATH="${_builddir}${_gopath:+:${_gopath}}"
+    GOPATH=${_builddir}
     cd "${_builddir}/src/${_gourl}/${_pkgname}"
     go fix
     go build -x -tags='sqlite pam cert'
