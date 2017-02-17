@@ -49,9 +49,9 @@ prepare() {
     export GOPATH="$srcdir"
 
     mkdir -p ./src/${_team}
-    mkdir -p ./src/github.com/jteeuwen
-
     mv    -t ./src/${_team}   ./${_pkgname}
+
+    mkdir -p ./src/github.com/jteeuwen
     mv    -t ./src/github.com/jteeuwen ./go-bindata
 
     cd "$_gogsdir"
