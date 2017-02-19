@@ -8,7 +8,7 @@ _pkgname=gogs
 _team=github.com/gogits
 _gogsdir="src/${_team}/${_pkgname}"
 pkgname=${_pkgname}-git
-pkgver=0.9.145.0213+7+1381f0f2
+pkgver=0.9.153.0217+2+ba935048
 pkgrel=1
 pkgdesc="Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
@@ -26,7 +26,6 @@ optdepends=(
 "openssh: GIT over SSH support"
 )
 makedepends=('go' 'git' 'nodejs-less')
-backup=("etc/${_pkgname}/app.ini")
 install=${_pkgname}.install
 
 source=(
@@ -93,11 +92,10 @@ package() {
     install -Dm0644 -t "$pkgdir/usr/lib/systemd/system"  "$srcdir/${_pkgname}.service"
 
     install -Dm0644 "$srcdir/${_pkgname}.tmpfiles" "$pkgdir/usr/lib/tmpfiles.d/${_pkgname}.conf"
-    install -Dm064  -t "$pkgdir/etc/${_pkgname}" ./conf/app.ini
 
 }
 
 sha512sums=('SKIP'
             'SKIP'
-            '9d97d63fb74f9dc824875755e165f6fd11f2529b73b09020f62936a4d3f494102c018444429a20286dc287ad5d301e4e7f4000312ab82e382cd4635ebb0007cf'
+            'ae93c18970125e21e502d4833dbfb6867a55157ab8cc2dace120fb5ea5d86cea583f01b88dac2c56d9f059631c95e953df99f92e0def718946b348481ce2371f'
             '658935dc129d41b4bfc205ea8e9c225122862431f8b96932942ec345bc23cc7b55644247a8844c1f66bfd16ee35fc9da766f62f07603cbe6d573102edb4222f8')
