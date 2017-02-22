@@ -1,6 +1,6 @@
 # Contributor: Thomas Laroche <tho.laroche@gmail.com>
 # Contributor: Thomas Fanninger <thomas@fanninger.at>
-# Contributor surefire@cryptomile.net
+# Contributor: surefire@cryptomile.net
 # Maintainer: Edvinas Valatka <edacval@gmail.com>
 
 _branch=master
@@ -8,7 +8,7 @@ _pkgname=gogs
 _team=github.com/gogits
 _gogsdir="src/${_team}/${_pkgname}"
 pkgname=${_pkgname}-git
-pkgver=0.9.153.0217+2+ba935048
+pkgver=0.9.165.0221+0.10RC+1+d21dc0da
 pkgrel=1
 pkgdesc="Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
@@ -35,15 +35,6 @@ source=(
 "${_pkgname}.tmpfiles"
 )
 
-pkgver() {
-    cd "$_gogsdir"
-    printf '%s+%s+%s' \
-        $(<templates/.VERSION) \
-        $(git rev-list --count HEAD...$(git log --pretty=format:%H -n 1 -- templates/.VERSION)) \
-        $(git rev-parse --short HEAD) \
-        ;
-}
-
 prepare() {
     export GOPATH="$srcdir"
 
@@ -67,6 +58,14 @@ prepare() {
         #   ;
 }
 
+pkgver() {
+    cd "$_gogsdir"
+    printf '%s+%s+%s' \
+        $(sed -e 's,/,+,g; s, ,,g' templates/.VERSION) \
+        $(git rev-list --count HEAD...$(git log --pretty=format:%H -n 1 -- templates/.VERSION)) \
+        $(git rev-parse --short HEAD) \
+        ;
+}
 
 build() {
     export GOPATH="$srcdir"
