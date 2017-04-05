@@ -8,7 +8,7 @@ _pkgname=gogs
 _team=github.com/gogits
 _gogsdir="src/${_team}/${_pkgname}"
 pkgname=${_pkgname}-git
-pkgver=0.10.32.0328+0.11RC+2+abe7f7bc3
+pkgver=0.11.3.0404+3+ba151eda0
 pkgrel=1
 pkgdesc="Self Hosted Git Service in the Go Programming Language. This is the current git version from branch ${_branch}."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
@@ -51,11 +51,6 @@ prepare() {
         -e '/^\[server\]/, /^\[/ s/^(STATIC_ROOT_PATH)\W.*$/\1 = \/usr\/share\/gogs/' \
         -e '/^\[log\]/,    /^\[/ s/^(ROOT_PATH)\W.*$/\1 = \/var\/log\/gogs/' \
         ;
-
-    ## Dirty hack
-    #sed -i vendor/github.com/go-xorm/xorm/logger.go \
-        #   -e '/DEFAULT_LOG_LEVEL/ s/core\.LOG_DEBUG/core.LOG_WARNING/' vendor/github.com/go-xorm/xorm/logger.go \
-        #   ;
 }
 
 pkgver() {
